@@ -40,3 +40,14 @@ def delete_post(id_: int, db: Session = Depends(db_connect.get_db)):
     if delete_status is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Post Not Found")
     return "post deleted"
+
+
+@app.put("/posts/{id_}")
+def update_post(id_: int, post_: PostRequestModel, db: Session = Depends(db_connect.get_db)):
+    post_query = crud.update_post_by_id(db, id_)
+    post = post_query.first()
+    if post is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Post Not Found")
+    post_query.update(post_.dict(), synchronize_session=False)
+    db.commit()
+    return post_query.first()

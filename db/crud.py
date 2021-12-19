@@ -26,3 +26,8 @@ def delete_post_by_id(db: Session, post_id: int):
     post.delete(synchronize_session=False)
     db.commit()
     return 1
+
+
+def update_post_by_id(db: Session, post_id: int):
+    return db.query(db_models.DbPost).filter(db_models.DbPost.id == post_id)
+
