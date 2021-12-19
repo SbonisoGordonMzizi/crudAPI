@@ -1,6 +1,6 @@
-from fastapi import FastAPI, status, Response, Depends
+from fastapi import FastAPI, status, Depends
 from fastapi.exceptions import HTTPException
-from db import crud, db_models, db_connect
+from db import crud, db_connect
 from models.schemas import PostResponseModel, PostRequestModel
 from sqlalchemy.orm import Session
 
@@ -28,5 +28,9 @@ def get_post_id(id_: int, db: Session = Depends(db_connect.get_db)):
         return data
 
 
+@app.post("/posts", status_code=status.HTTP_201_CREATED)
+def add_post(post: PostRequestModel, db: Session = Depends(db_connect.get_db)):
+    data = crud.add_new_post(db, post)
+    return data
 
 
