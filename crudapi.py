@@ -34,3 +34,9 @@ def add_post(post: PostRequestModel, db: Session = Depends(db_connect.get_db)):
     return data
 
 
+@app.delete("/posts/{id_}")
+def delete_post(id_: int, db: Session = Depends(db_connect.get_db)):
+    delete_status = crud.delete_post_by_id(db, id_)
+    if delete_status is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Post Not Found")
+    return "post deleted"

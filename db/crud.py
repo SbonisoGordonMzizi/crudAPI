@@ -17,3 +17,12 @@ def add_new_post(db: Session, post: schemas.PostRequestModel):
     db.commit()
     db.refresh(new_post)
     return new_post
+
+
+def delete_post_by_id(db: Session, post_id: int):
+    post = db.query(db_models.DbPost).filter(db_models.DbPost.id == post_id)
+    if post.first() is None:
+        return None
+    post.delete(synchronize_session=False)
+    db.commit()
+    return 1
