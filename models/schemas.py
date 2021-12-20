@@ -57,9 +57,10 @@ class UserRequestModel(UserBase):
 class UserResponseModel(UserBase):
     id: int
     is_active: bool
-    time_created = datetime
+    time_created: datetime
 
     class Config:
+        orm_mode = True
         schema_extra = {
             "example": {
                 "id": 10,
