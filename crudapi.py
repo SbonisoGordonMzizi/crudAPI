@@ -1,53 +1,16 @@
-from fastapi import FastAPI, status, Depends
-from fastapi.exceptions import HTTPException
-from db import crud, db_connect
-from models.schemas import PostResponseModel, PostRequestModel
-from sqlalchemy.orm import Session
+from fastapi import FastAPI
+from db import post_crud, db_connect
+from route import post_path, user_path
+
 
 db_connect.Base.metadata.create_all(bind=db_connect.engine)
 
 
-app = FastAPI()
+app = FastAPI(
+    title="crudAPI  ",
+    description="simple crudPI",
+    version="0.0.1"
+              )
 
-
-@app.get("/posts")
-def get_post_all(db: Session = Depends(db_connect.get_db)):
-    data = crud.get_posts(db)
-    if data == []:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Posts Not Found")
-    else:
-        return data
-
-
-@app.get("/posts/{id_}", response_model=PostResponseModel)
-def get_post_id(id_: int, db: Session = Depends(db_connect.get_db)):
-    data = crud.get_post_by_id(db, id_)
-    if data is None:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Post Not Found")
-    else:
-        return data
-
-
-@app.post("/posts", status_code=status.HTTP_201_CREATED)
-def add_post(post: PostRequestModel, db: Session = Depends(db_connect.get_db)):
-    data = crud.add_new_post(db, post)
-    return data
-
-
-@app.delete("/posts/{id_}")
-def delete_post(id_: int, db: Session = Depends(db_connect.get_db)):
-    delete_status = crud.delete_post_by_id(db, id_)
-    if delete_status is None:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Post Not Found")
-    return "post deleted"
-
-
-@app.put("/posts/{id_}")
-def update_post(id_: int, post_: PostRequestModel, db: Session = Depends(db_connect.get_db)):
-    post_query = crud.update_post_by_id(db, id_)
-    post = post_query.first()
-    if post is None:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Post Not Found")
-    post_query.update(post_.dict(), synchronize_session=False)
-    db.commit()
-    return post_query.first()
+app.include_router(post_path.post_route)
+app.include_router(user_path.user_route)
