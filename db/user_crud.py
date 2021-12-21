@@ -7,12 +7,12 @@ def get_user_by_id(db: Session, user_id: int):
     return db.query(db_models.DbUser).filter(db_models.DbUser.id == user_id).first()
 
 
-def get_user_by_email(db: Session, user_email: int):
+def get_user_by_email(db: Session, user_email: str):
     return db.query(db_models.DbUser).filter(db_models.DbUser.email == user_email).first()
 
 
-def create_new_user(db: Session, post: schemas.UserRequestModel):
-    new_user = db_models.DbUser(**post.dict())
+def create_new_user(db: Session, user: schemas.UserRequestModel):
+    new_user = db_models.DbUser(**user.dict())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)

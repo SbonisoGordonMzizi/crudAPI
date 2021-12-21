@@ -21,7 +21,7 @@ def get_post_all(db: Session = Depends(db_connect.get_db)):
 
 
 @post_route.get("/posts/{id_}", response_model=PostResponseModel)
-def get_post_id(id_: int, db: Session = Depends(db_connect.get_db)):
+def get_post_by_id(id_: int, db: Session = Depends(db_connect.get_db)):
     data = post_crud.get_post_by_id(db, id_)
     if data is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Post Not Found")
@@ -30,13 +30,13 @@ def get_post_id(id_: int, db: Session = Depends(db_connect.get_db)):
 
 
 @post_route.post("/posts", status_code=status.HTTP_201_CREATED)
-def add_post(post: PostRequestModel, db: Session = Depends(db_connect.get_db)):
+def add_new_post(post: PostRequestModel, db: Session = Depends(db_connect.get_db)):
     data = post_crud.add_new_post(db, post)
     return data
 
 
 @post_route.delete("/posts/{id_}")
-def delete_post(id_: int, db: Session = Depends(db_connect.get_db)):
+def delete_post_by_id(id_: int, db: Session = Depends(db_connect.get_db)):
     delete_status = post_crud.delete_post_by_id(db, id_)
     if delete_status is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Post Not Found")
@@ -44,7 +44,7 @@ def delete_post(id_: int, db: Session = Depends(db_connect.get_db)):
 
 
 @post_route.put("/posts/{id_}")
-def update_post(id_: int, post_: PostRequestModel, db: Session = Depends(db_connect.get_db)):
+def update_old_post(id_: int, post_: PostRequestModel, db: Session = Depends(db_connect.get_db)):
     post_query = post_crud.update_post_by_id(db, id_)
     post = post_query.first()
     if post is None:

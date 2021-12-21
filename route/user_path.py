@@ -10,7 +10,25 @@ user_route = APIRouter(
 )
 
 
+@user_route.get("/users/id/{id_}", response_model=UserResponseModel)
+def get_user_profile_by_id(id_: int, db: Session = Depends(db_connect.get_db)):
+    data = user_crud.get_user_by_id(db,id_)
+    if data is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Post Not Found")
+    else:
+        return data
+
+
+@user_route.get("/users/email/{email}", response_model=UserResponseModel)
+def get_user_profile_by_email(email: str, db: Session = Depends(db_connect.get_db)):
+    data = user_crud.get_user_by_email(db, email)
+    if data is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Posts Not Found")
+    else:
+        return data
+
+
 @user_route.post("/users", status_code=status.HTTP_201_CREATED, response_model=UserResponseModel)
-def add_post(user: UserRequestModel, db: Session = Depends(db_connect.get_db)):
+def create_new_user(user: UserRequestModel, db: Session = Depends(db_connect.get_db)):
     data = user_crud.create_new_user(db, user)
     return data
