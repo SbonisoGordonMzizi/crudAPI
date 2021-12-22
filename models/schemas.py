@@ -71,3 +71,8 @@ class UserResponseModel(UserBase):
                 "time_created": "2021-12-19T11:40:24.618287+02:00"
             }
         }
+
+
+class UserUpdateModel(BaseModel):
+    firstName: str
+

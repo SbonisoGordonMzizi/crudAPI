@@ -1,7 +1,7 @@
 from fastapi import status, Depends, APIRouter
 from fastapi.exceptions import HTTPException
 from db import user_crud, db_connect
-from models.schemas import UserRequestModel, UserResponseModel
+from models.schemas import UserRequestModel, UserResponseModel,UserUpdateModel
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -48,3 +48,14 @@ def delete_post_by_email(user_id: int, db: Session = Depends(db_connect.get_db))
     if delete_status is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="User Not Found")
     return "account deleted"
+
+
+@user_route.put("/api/v1/users/{id_}")
+def update_user_profile(id_: int, post_: UserUpdateModel, db: Session = Depends(db_connect.get_db)):
+    post_query = user_crud.update_user_by_id(db, id_)
+    post = post_query.first()
+    if post is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="User Not Found")
+    post_query.update(post_.dict(), synchronize_session=False)
+    db.commit()
+    return post_query.first()
