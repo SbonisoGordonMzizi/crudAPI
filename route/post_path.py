@@ -11,7 +11,7 @@ post_route = APIRouter(
 )
 
 
-@post_route.get("/posts", response_model=List[PostResponseModel])
+@post_route.get("/api/v1/posts", response_model=List[PostResponseModel])
 def get_post_all(db: Session = Depends(db_connect.get_db)):
     data = post_crud.get_posts(db)
     if data == []:
@@ -20,7 +20,7 @@ def get_post_all(db: Session = Depends(db_connect.get_db)):
         return data
 
 
-@post_route.get("/posts/{id_}", response_model=PostResponseModel)
+@post_route.get("/api/v1/posts/{id_}", response_model=PostResponseModel)
 def get_post_by_id(id_: int, db: Session = Depends(db_connect.get_db)):
     data = post_crud.get_post_by_id(db, id_)
     if data is None:
@@ -29,13 +29,13 @@ def get_post_by_id(id_: int, db: Session = Depends(db_connect.get_db)):
         return data
 
 
-@post_route.post("/posts", status_code=status.HTTP_201_CREATED)
+@post_route.post("/api/v1/posts", status_code=status.HTTP_201_CREATED)
 def add_new_post(post: PostRequestModel, db: Session = Depends(db_connect.get_db)):
     data = post_crud.add_new_post(db, post)
     return data
 
 
-@post_route.delete("/posts/{id_}")
+@post_route.delete("/api/v1/posts/{id_}")
 def delete_post_by_id(id_: int, db: Session = Depends(db_connect.get_db)):
     delete_status = post_crud.delete_post_by_id(db, id_)
     if delete_status is None:
@@ -43,7 +43,7 @@ def delete_post_by_id(id_: int, db: Session = Depends(db_connect.get_db)):
     return "post deleted"
 
 
-@post_route.put("/posts/{id_}")
+@post_route.put("/api/v1/posts/{id_}")
 def update_old_post(id_: int, post_: PostRequestModel, db: Session = Depends(db_connect.get_db)):
     post_query = post_crud.update_post_by_id(db, id_)
     post = post_query.first()
