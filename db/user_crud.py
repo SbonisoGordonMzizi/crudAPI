@@ -40,3 +40,8 @@ def delete_user_by_id(db: Session, user_id: int):
 def update_user_by_id(db: Session, user_id: int):
     return db.query(db_models.DbUser).filter(db_models.DbUser.id == user_id)
 
+
+def deactivate_user_by_id(db: Session, user_id: int):
+    return db.query(db_models.DbUser).filter(db_models.DbUser.id == user_id)
+
+

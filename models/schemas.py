@@ -73,6 +73,6 @@ class UserResponseModel(UserBase):
         }
 
 
-class UserUpdateModel(BaseModel):
-    firstName: str
+class UserDeactivateModel(BaseModel):
+    is_active: bool
 
