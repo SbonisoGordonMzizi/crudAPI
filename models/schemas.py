@@ -75,4 +75,29 @@ class UserResponseModel(UserBase):
 
 class UserDeactivateModel(BaseModel):
     is_active: bool
+    schema_extra = {
+        "example": {
+            "is_active": "true",
+        }
+    }
+
+
+class UserAuthModel(BaseModel):
+    email: EmailStr
+    password: str
+    schema_extra = {
+        "example": {
+            "email": "smzizi@gmail.com",
+            "password": "vice12345"
+        }
+    }
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
 

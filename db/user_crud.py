@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from . import db_models
 from models import schemas
+from utils import encrypt_decrypt
 
 
 def get_user_by_id(db: Session, user_id: int):
@@ -12,7 +13,10 @@ def get_user_by_email(db: Session, user_email: str):
 
 
 def create_new_user(db: Session, user: schemas.UserRequestModel):
-    new_user = db_models.DbUser(**user.dict())
+    hashed_passwd = encrypt_decrypt.get_password_hash(user.password)
+    user_dict = user.dict()
+    user_dict["password"] = hashed_passwd
+    new_user = db_models.DbUser(**user_dict)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)

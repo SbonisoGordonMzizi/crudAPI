@@ -1,18 +1,20 @@
 from fastapi import status, Depends, APIRouter
 from fastapi.exceptions import HTTPException
 from db import user_crud, db_connect
-from models.schemas import UserRequestModel, UserResponseModel,UserDeactivateModel
+from models.schemas import UserRequestModel, UserResponseModel, UserDeactivateModel
 from sqlalchemy.orm import Session
-from typing import List
+from .auth_path import is_user_active
 
 user_route = APIRouter(
-    tags=["USER Endpoints"]
+    tags=["USER EndPoints"]
 )
 
 
 @user_route.get("/api/v1/users/id/{user_id}", response_model=UserResponseModel)
-def get_user_profile_by_id(user_id: int, db: Session = Depends(db_connect.get_db)):
-    data = user_crud.get_user_by_id(db,user_id)
+def get_user_profile_by_id(user_id: int, user_status: bool = Depends(is_user_active),\
+                           db: Session = Depends(db_connect.get_db)):
+
+    data = user_crud.get_user_by_id(db, user_id)
     if data is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Post Not Found")
     else:
@@ -20,7 +22,8 @@ def get_user_profile_by_id(user_id: int, db: Session = Depends(db_connect.get_db
 
 
 @user_route.get("/api/v1/users/email/{email}", response_model=UserResponseModel)
-def get_user_profile_by_email(email: str, db: Session = Depends(db_connect.get_db)):
+def get_user_profile_by_email(email: str, user_status: bool = Depends(is_user_active),\
+                              db: Session = Depends(db_connect.get_db)):
     data = user_crud.get_user_by_email(db, email)
     if data is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Posts Not Found")
@@ -35,7 +38,8 @@ def create_new_user(user: UserRequestModel, db: Session = Depends(db_connect.get
 
 
 @user_route.delete("/api/v1/users/email/{user_email}")
-def delete_post_by_email(user_email: str, db: Session = Depends(db_connect.get_db)):
+def delete_post_by_email(user_email: str, user_status: bool = Depends(is_user_active), \
+                         db: Session = Depends(db_connect.get_db)):
     delete_status = user_crud.delete_user_by_email(db, user_email)
     if delete_status is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Post Not Found")
@@ -43,7 +47,8 @@ def delete_post_by_email(user_email: str, db: Session = Depends(db_connect.get_d
 
 
 @user_route.delete("/api/v1/users/id/{user_id}")
-def delete_post_by_email(user_id: int, db: Session = Depends(db_connect.get_db)):
+def delete_post_by_email(user_id: int, user_status: bool = Depends(is_user_active), \
+                         db: Session = Depends(db_connect.get_db)):
     delete_status = user_crud.delete_user_by_id(db, user_id)
     if delete_status is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="User Not Found")
@@ -51,7 +56,8 @@ def delete_post_by_email(user_id: int, db: Session = Depends(db_connect.get_db))
 
 
 @user_route.put("/api/v1/users/update/{id_}")
-def update_user_profile(id_: int, post_: UserRequestModel, db: Session = Depends(db_connect.get_db)):
+def update_user_profile(id_: int, post_: UserResponseModel, user_status: bool = Depends(is_user_active),\
+                        db: Session = Depends(db_connect.get_db)):
     post_query = user_crud.update_user_by_id(db, id_)
     post = post_query.first()
     if post is None:
@@ -62,7 +68,8 @@ def update_user_profile(id_: int, post_: UserRequestModel, db: Session = Depends
 
 
 @user_route.put("/api/v1/users/deactivate/{id_}")
-def user_account_deactivate(id_: int, post_: UserDeactivateModel, db: Session = Depends(db_connect.get_db)):
+def user_account_deactivate(id_: int, post_: UserDeactivateModel, user_status: bool = Depends(is_user_active),\
+                            db: Session = Depends(db_connect.get_db)):
     post_query = user_crud.deactivate_user_by_id(db, id_)
     post = post_query.first()
     if post is None:
