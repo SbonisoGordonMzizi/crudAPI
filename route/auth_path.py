@@ -8,6 +8,7 @@ from fastapi import Depends, status, HTTPException,APIRouter
 from utils import encrypt_decrypt
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from models import schemas
+from config import setting
 
 
 user_login_route = APIRouter(
@@ -16,9 +17,9 @@ user_login_route = APIRouter(
 
 oauth_object = OAuth2PasswordBearer(tokenUrl="/api/v1/token")
 
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+SECRET_KEY = setting.config_env.secret_key
+ALGORITHM = setting.config_env.algorithm
+ACCESS_TOKEN_EXPIRE_MINUTES = int(setting.config_env.access_token_valid_time)
 
 
 def authenticate_user(username: str, password: str, db: Session = Depends(db_connect.get_db)):
