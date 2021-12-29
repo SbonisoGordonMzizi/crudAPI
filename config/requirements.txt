@@ -19,7 +19,7 @@ Jinja2==3.0.3
 MarkupSafe==2.0.1
 orjson==3.6.5
 passlib==1.7.4
-psycopg2==2.9.2
+psycopg2-binary==2.9.3
 pyasn1==0.4.8
 pycparser==2.21
 pydantic==1.8.2
