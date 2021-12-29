@@ -8,7 +8,7 @@ from .auth_path import is_user_active
 from models import schemas
 
 post_route = APIRouter(
-    tags=["POST EndPoints"]
+    tags=["POST"]
 )
 
 

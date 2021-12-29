@@ -12,7 +12,7 @@ from config import setting
 
 
 user_login_route = APIRouter(
-    tags=["USER AUTH EndPoints"]
+    tags=["AUTHENTICATION"]
 )
 
 oauth_object = OAuth2PasswordBearer(tokenUrl="/api/v1/token")
@@ -63,8 +63,9 @@ async def get_current_user(token: str = Depends(oauth_object), db: Session = Dep
 
 
 async def is_user_active(current_user: UserResponseModel = Depends(get_current_user)):
-    if current_user.is_active:
+    if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
+    print(current_user)
     return current_user
 
 

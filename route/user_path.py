@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from .auth_path import is_user_active
 
 user_route = APIRouter(
-    tags=["USER EndPoints"]
+    tags=["USER"]
 )
 
 
