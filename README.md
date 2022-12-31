@@ -21,22 +21,3 @@ GET /resources/{id}: retrieves a specific resource by id
 PUT /resources/{id}: updates a specific resource by id
 DELETE /resources/{id}: deletes a specific resource by id
 ```
-
-#Example Usage
-Here is an example of how to use the API with curl:
-
-Copy code
-# Retrieve a list of resources
-curl http://localhost:8000/resources
-
-# Create a new resource
-curl -X POST -d '{"name": "resource1"}' http://localhost:8000/resources
-
-# Retrieve a specific resource
-curl http://localhost:8000/resources/1
-
-# Update a specific resource
-curl -X PUT -d '{"name": "resource2"}' http://localhost:8000/resources/1
-
-# Delete a specific resource
-curl -X DELETE http://localhost:8000/resources/1
