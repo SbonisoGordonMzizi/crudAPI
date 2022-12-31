@@ -1,5 +1,4 @@
 # crudAPI
-# Simple CRUD API
 
 This is a simple CRUD API built using FastAPI, a modern, fast, and lightweight Python web framework. It allows users to create, read, update, and delete resources via HTTP requests.
 
