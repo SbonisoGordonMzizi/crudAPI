@@ -15,9 +15,18 @@ Run the development server: uvicorn main:app --reload
 #Endpoints
 The API has the following endpoints:
 ```
-GET /resources: retrieves a list of all resources
-POST /resources: creates a new resource
-GET /resources/{id}: retrieves a specific resource by id
-PUT /resources/{id}: updates a specific resource by id
-DELETE /resources/{id}: deletes a specific resource by id
+GET /api/v1/users/id/{user_id}: retrieves a specific user by user_id
+GET /api/v1/users/email/{email}: retrieves a specific user by email
+POST /api/v1/users: create a user
+DELETE /api/v1/users/email/{user_email}: deletes a specific user by email
+DELETE /api/v1/users/id/{user_id}: deletes a specific user by user_id
+PUT /api/v1/users/update/{id_}: updates a specific user by id
+PUT /api/v1/users/deactivate/{id_}: deactivate specific user by id
+
+GET /api/v1/posts/{id_}: retrieves a specific post by user_id
+POST /api/v1/posts: create a post
+DELETE /api/v1/posts/{id_}: deletes a specific post by id_
+PUT /api/v1/posts/{id_}: updates a specific post by id
+
+POST /api/v1/token: authenticate using password and username, get token as response 
 ```
